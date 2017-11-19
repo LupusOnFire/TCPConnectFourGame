@@ -1,4 +1,4 @@
-package logic;
+package server.logic.entity;
 
 import java.util.Arrays;
 
