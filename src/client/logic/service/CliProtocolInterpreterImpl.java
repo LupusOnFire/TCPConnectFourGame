@@ -3,6 +3,8 @@ package client.logic.service;
 
 import server.logic.entity.Board;
 
+import java.io.ByteArrayInputStream;
+import java.io.ObjectInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
@@ -43,6 +45,9 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
                 }
                 case GNAK: {
                     return gameDeclineIn(data);
+                }
+                case GAME: {
+                    return gameBoard(data);
                 }
             }
         }
@@ -148,10 +153,23 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String gameBoard(String data) {
-        System.out.println("GAME CALLED:\n " + data);
-        return data.substring(5,data.length());
+        Board board = deserialize(data, Board.class);
+        return board.toString();
     }
 
+    public static <T> T deserialize(String str, Class<T> cls) {
+        // deserialize the object
+        try {
+            // This encoding induces a bijection between byte[] and String (unlike UTF-8)
+            byte b[] = str.getBytes("ISO-8859-1");
+            ByteArrayInputStream bi = new ByteArrayInputStream(b);
+            ObjectInputStream si = new ObjectInputStream(bi);
+            return cls.cast(si.readObject());
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     @Override
     public String quit() {

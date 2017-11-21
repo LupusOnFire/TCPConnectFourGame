@@ -4,6 +4,7 @@ import server.logic.entity.Board;
 import server.logic.entity.Client;
 import server.logic.entity.Slot;
 
+import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
@@ -20,8 +21,8 @@ public class GameInstance {
         this.player1 = player1;
         this.player2 = player2;
         this.board = new Board();
-        sendToBothClients(board.toString());
-        System.out.println("BOARD:\n" + board.toString());
+        sendToBothClients(GAME + " " + serialize(board));
+        System.out.println(board.toString());
     }
 
     public Client getPlayer1() {
@@ -29,6 +30,20 @@ public class GameInstance {
     }
     public Client getPlayer2() {
         return player2;
+    }
+
+    public static String serialize(Object obj) {
+        try {
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(obj);
+            so.flush();
+            // This encoding induces a bijection between byte[] and String (unlike UTF-8)
+            return bo.toString("ISO-8859-1");
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return "ERROR";
     }
 
     public void digestMessage(String data) {
@@ -40,7 +55,7 @@ public class GameInstance {
                     sendToBothClients(data);
                     break;
                 }
-                case MOVE: {
+                /*case MOVE: {
                     int row = Integer.parseInt(args[3]);
                     if (args[1].equals(player1.getUsername())) {
                         board.putPiece(row, Slot.PLAYER1);
@@ -49,7 +64,7 @@ public class GameInstance {
                     }
                     sendToBothClients(GAME + " " + board.toString());
                     break;
-                }
+                }*/
                 default: {
                     sendToBothClients(data);
                     break;
@@ -57,14 +72,20 @@ public class GameInstance {
             }
         }
     }
-    public void gameObjectStream(){
+    public String serializeBoard() {
+        String serializedObject = "";
         try {
-            ObjectOutputStream out = new ObjectOutputStream(player1.getSocket().getOutputStream());
-            out.writeObject(board);
+            ByteArrayOutputStream bo = new ByteArrayOutputStream();
+            ObjectOutputStream so = new ObjectOutputStream(bo);
+            so.writeObject(board);
+            so.flush();
+            serializedObject = bo.toString();
         } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println(e);
         }
+        return serializedObject;
     }
+
     public void sendToBothClients(String data){
         try {
             DataOutputStream out = new DataOutputStream(player1.getSocket().getOutputStream());
