@@ -1,4 +1,7 @@
 import client.CommandlineClient;
+import client.logic.controller.Controller;
+import client.logic.service.CliProtocolInterpreterImpl;
+import client.logic.service.IProtocolInterpreter;
 import server.logic.ConnectionBroker;
 import server.logic.Engine;
 import server.logic.entity.Board;
@@ -25,8 +28,14 @@ public class Main {
                 if (args.length > 1 && (args[1].equals("-h") || args[1].equals("--hotseat"))) {
                     hotSeat();
                 } else {
-                    CommandlineClient cli = new CommandlineClient();
-                    cli.connectToServer();
+                    Controller controller = new Controller();
+                    CommandlineClient cli = new CommandlineClient(controller);
+                    cli.setRemoteServer();
+                    boolean connected = cli.joinServer();
+                    System.out.println(connected);
+                    if (!connected)
+                        return;
+                    cli.clientInput();
                 }
             }
         }

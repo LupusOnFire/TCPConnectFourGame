@@ -8,6 +8,8 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
+import static server.logic.Constants.*;
+
 public class ConnectionBroker implements Runnable{
     boolean stopped = false;
     private int serverPort;
@@ -46,10 +48,10 @@ public class ConnectionBroker implements Runnable{
                 if (data.startsWith("JOIN ") && data.length() > 5) {
                     //Engine.register returns true or false depending on if username is available
                     if (engine.register(newSocket, data.substring(5, data.length()))) {
-                        out.writeUTF(Constants.J_OK);
+                        out.writeUTF(J_OK);
                     }
                 } else {
-                    out.writeUTF(Constants.JERR);
+                    out.writeUTF(JERR);
                 }
             } catch (Exception e) {
                 e.printStackTrace();
