@@ -38,21 +38,15 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String output(String data) {
-        if (data.startsWith("!")) {
-            switch (data.toLowerCase()) {
-                case "!play": {
-                    return gameChallengeOut(data);
-                }
-                case "!accept": {
-                    return gameAcceptOut(data);
-                }
-                case "!decline": {
-                    return gameDeclineOut(data);
-                }
-                case "!quit": {
-                    return quit();
-                }
-            }
+        if (data.charAt(0) == '!') {
+            if (data.startsWith("!play"))
+                return gameChallengeOut(data);
+            else if (data.startsWith("!accept"))
+                return gameChallengeOut(data);
+            else if (data.startsWith("!decline"))
+                return gameDeclineOut(data);
+            else if (data.startsWith("!quit"))
+                return quit();
         }
         return dataOut(data);
     }

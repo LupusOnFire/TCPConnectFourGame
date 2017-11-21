@@ -42,10 +42,10 @@ public class Engine implements Subject, Runnable {
                 }
                 case GCHL: {
                     String[] args = message.split(" ");
-                    if (clientExists(args[3])) {
-                        challengeClient(args[2], args[3]);
+                    if (clientExists(args[2])) {
+                        challengeClient(args[1], args[2]);
                     } else {
-                        sendToClient(clientRepository.getClientByUsername(args[2]).getSocket(), GERR);
+                        sendToClient(clientRepository.getClientByUsername(args[1]).getSocket(), GERR);
                     }
                     break;
                 }
