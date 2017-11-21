@@ -48,6 +48,11 @@ public class CommandlineClient implements IClient {
         while (true) {
             String in = input.nextLine();
             controller.sendData(in);
+            if (in.equals("!quit")){
+                controller.stopConnectionThread();
+                System.out.println("Goodbye!");
+                return;
+            }
         }
     }
 
@@ -59,11 +64,16 @@ public class CommandlineClient implements IClient {
 
     @Override
     public boolean joinServer()  {
-        if (controller.joinServer(username)) {
-            System.out.println("Successfully connected");
-            return true;
-        } else {
-            System.out.println("Error connecting!");
+        try {
+            if (controller.joinServer(username)) {
+                System.out.println("Successfully connected");
+                return true;
+            } else {
+                System.out.println("Error connecting!");
+            }
+        } catch (NullPointerException e) {
+            System.out.println("Could not connect to server");
+            return false;
         }
         return false;
     }

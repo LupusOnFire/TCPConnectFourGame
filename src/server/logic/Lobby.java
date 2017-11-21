@@ -10,25 +10,27 @@ import java.util.List;
 
 import static server.logic.Constants.*;
 
-public class Engine implements Subject, Runnable {
+public class Lobby implements Subject {
     ClientRepository clientRepository;
 
-    public Engine() {
+    public Lobby() {
         this.clientRepository = new ClientRepository();
-    }           //System.out.println(in);
+    }
 
 
     private String createListString(){
         String list = LIST + " ";
         List<Client> clientList = clientRepository.getClients();
         for (Client c : clientList) {
-            list += c.getUsername() + " ";
+            if (c.isInLobby()) {
+                list += c.getUsername() + " ";
+            }
         }
         return list;
     }
 
     public void digestMessage(String message){
-        System.out.println("SERVER RECEIVED: \"" + message + "\"");
+        System.out.println("RECEIVED: \"" + message + "\"");
         if (message.length() >= 4) {
             String header = message.substring(0, 4);
             switch (header) {
@@ -37,7 +39,7 @@ public class Engine implements Subject, Runnable {
                     break;
                 }
                 case QUIT: {
-                    unregister(message);
+                    unregister(message.split(" ")[1]);
                     break;
                 }
                 case GCHL: {
@@ -51,12 +53,12 @@ public class Engine implements Subject, Runnable {
                 }
                 case GACK: {
                     String[] args = message.split(" ");
-                    challengeAccept(args[2], args[3]);
+                    challengeAccept(args[1], args[2]);
                     break;
                 }
                 case GNAK: {
                     String[] args = message.split(" ");
-                    challengeDecline(args[2], args[3]);
+                    challengeDecline(args[1], args[2]);
                     break;
                 }
             }
@@ -64,40 +66,44 @@ public class Engine implements Subject, Runnable {
     }
 
     @Override
-    public void run() {
-    }
-
-    @Override
     public void register(Socket socket, String username) {
         if (!clientExists(username)) {
-            Client client = clientRepository.addClient(socket, username);
-            System.out.println(username + " has joined");
+            Client client = clientRepository.addClient(socket, username, this);
+            System.out.println(username + " has joined from " + socket.getRemoteSocketAddress());
             sendToClient(socket, J_OK);
             notifyObserver(createListString());
-            ClientThread clientThread = new ClientThread(client, this);
-            Thread thread = new Thread(clientThread);
+            Thread thread = new Thread(client);
             thread.start();
         } else {
             sendToClient(socket, JERR);
         }
     }
 
-    @Override
-    public void unregister(String username) {
+    public void quit(String username) {
+        Client c = clientRepository.getClientByUsername(username);
+        c.setAlive(false);
         try {
-            Client c = clientRepository.getClientByUsername(username);
             c.getSocket().close();
-            clientRepository.removeClient(c);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+        unregister(username);
+    }
+
+    @Override
+    public void unregister(String username) {
+            Client c = clientRepository.getClientByUsername(username);
+            clientRepository.removeClient(c);
+            notifyObserver(createListString());
     }
 
     @Override
     public void notifyObserver(String message) {
         List<Client> clientList = clientRepository.getClients();
         for (Client c : clientList) {
-            sendToClient(c.getSocket(), message);
+            if (c.isInLobby()) {
+                sendToClient(c.getSocket(), message);
+            }
         }
     }
     private boolean clientExists(String username) {
@@ -112,8 +118,17 @@ public class Engine implements Subject, Runnable {
         sendToClient(client.getSocket(), GCHL + " " + challengerName);
     }
     private void challengeAccept(String challengerName, String opponentName) {
-        Client client = clientRepository.getClientByUsername(challengerName);
-        sendToClient(client.getSocket(), GACK + " " + opponentName);
+        Client challenger = clientRepository.getClientByUsername(challengerName);
+        Client opponent = clientRepository.getClientByUsername(opponentName);
+
+        sendToClient(challenger.getSocket(), GACK + " " + opponentName);
+
+        GameInstance gameInstance = new GameInstance(challenger, opponent);
+        challenger.setInLobby(false);
+        challenger.setGameInstance(gameInstance);
+        opponent.setInLobby(false);
+        opponent.setGameInstance(gameInstance);
+
     }
     private void challengeDecline(String challengerName, String opponentName) {
         Client client = clientRepository.getClientByUsername(challengerName);
@@ -124,9 +139,9 @@ public class Engine implements Subject, Runnable {
         try {
             DataOutputStream out = new DataOutputStream(socket.getOutputStream());
             out.writeUTF(message);
-            System.out.println("SERVER SENDING: \"" + message + "\"");
+            System.out.println("SENDING: \"" + message + "\"");
         } catch (IOException e) {
-            e.printStackTrace();
+            unregister(clientRepository.getClientBySocket(socket).getUsername());
         }
     }
 }

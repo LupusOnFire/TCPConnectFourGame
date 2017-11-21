@@ -1,9 +1,7 @@
 import client.CommandlineClient;
 import client.logic.controller.Controller;
-import client.logic.service.CliProtocolInterpreterImpl;
-import client.logic.service.IProtocolInterpreter;
 import server.logic.ConnectionBroker;
-import server.logic.Engine;
+import server.logic.Lobby;
 import server.logic.entity.Board;
 import server.logic.entity.Slot;
 import java.util.Scanner;
@@ -20,7 +18,7 @@ public class Main {
                     System.out.println("Missing server port integer");
                     return;
                 }
-                Engine engine = new Engine();
+                Lobby engine = new Lobby();
                 ConnectionBroker connectionBroker = new ConnectionBroker(engine, serverPort);
                 Thread connectionThread = new Thread(connectionBroker);
                 connectionThread.start();
@@ -31,8 +29,9 @@ public class Main {
                     Controller controller = new Controller();
                     CommandlineClient cli = new CommandlineClient(controller);
                     cli.setRemoteServer();
-                    cli.joinServer();
-                    cli.clientInput();
+                    if (cli.joinServer()){
+                        cli.clientInput();
+                    }
                 }
             }
         }

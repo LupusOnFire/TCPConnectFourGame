@@ -1,18 +1,29 @@
 package server.logic.entity;
 
-import java.io.DataOutputStream;
+import server.logic.GameInstance;
+import server.logic.Lobby;
+
+import java.io.DataInputStream;
 import java.io.IOException;
 import java.net.Socket;
 
-public class Client implements Observer {
+public class Client implements Runnable {
     private String username;
-    Socket socket;
-    boolean inLobby;
+    private Socket socket;
+    private boolean inLobby, isAlive;
+    private GameInstance gameInstance;
+    private Lobby lobby;
 
-    public Client(Socket socket, String username) {
+    public Client(Socket socket, String username, Lobby lobby) {
         this.socket = socket;
         this.username = username;
+        this.lobby = lobby;
+        this.isAlive = true;
         this.inLobby = true;
+    }
+
+    public void setGameInstance(GameInstance gameInstance) {
+        this.gameInstance = gameInstance;
     }
 
     public String getUsername() {
@@ -31,14 +42,25 @@ public class Client implements Observer {
         this.inLobby = inLobby;
     }
 
-    @Override
-    public void update(String message) {
-        try {
-            DataOutputStream out = new DataOutputStream(socket.getOutputStream());
-            out.writeUTF(message);
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
 
+    @Override
+    public void run() {
+        try {
+            DataInputStream in;
+            while (isAlive) {
+                in = new DataInputStream(getSocket().getInputStream());
+                if (isInLobby()) {
+                    lobby.digestMessage(in.readUTF());
+                } else {
+                    System.out.println("sending data to gameinstance");
+                    gameInstance.digestMessage(in.readUTF());
+                }
+            }
+        } catch (IOException e) {
+            lobby.quit(username);
+        }
     }
 }

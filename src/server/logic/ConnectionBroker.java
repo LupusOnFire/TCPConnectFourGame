@@ -14,11 +14,11 @@ public class ConnectionBroker implements Runnable{
     boolean stopped = false;
     private int serverPort;
     ServerSocket serverSocket;
-    Engine engine;
+    Lobby lobby;
 
-    public ConnectionBroker(Engine engine, int serverPort) {
+    public ConnectionBroker(Lobby lobby, int serverPort) {
         this.serverPort = serverPort;
-        this.engine = engine;
+        this.lobby = lobby;
     }
 
     @Override
@@ -46,7 +46,7 @@ public class ConnectionBroker implements Runnable{
 
                 //accept and add client if client uses the protocol
                 if (data.startsWith("JOIN ") && data.length() > 5) {
-                    engine.register(newSocket, data.substring(5, data.length()));
+                    lobby.register(newSocket, data.substring(5, data.length()));
                 } else {
                     out.writeUTF(JERR);
                 }

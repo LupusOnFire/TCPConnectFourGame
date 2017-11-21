@@ -1,6 +1,11 @@
 package client.logic.service;
 
 
+import server.logic.entity.Board;
+
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
+
 import static server.logic.Constants.*;
 
 public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
@@ -23,13 +28,21 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
                 }
                 case JERR: {
                     return joinError();
-
                 }
                 case LIST: {
                     return listClients(data);
                 }
                 case DATA: {
                     return dataIn(data);
+                }
+                case GCHL: {
+                    return gameChallengeIn(data);
+                }
+                case GACK: {
+                    return gameAcceptIn(data);
+                }
+                case GNAK: {
+                    return gameDeclineIn(data);
                 }
             }
         }
@@ -38,15 +51,22 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String output(String data) {
-        if (data.charAt(0) == '!') {
-            if (data.startsWith("!play"))
-                return gameChallengeOut(data);
-            else if (data.startsWith("!accept"))
-                return gameChallengeOut(data);
-            else if (data.startsWith("!decline"))
-                return gameDeclineOut(data);
-            else if (data.startsWith("!quit"))
-                return quit();
+        if (data.length() > 1) {
+            Pattern p = Pattern.compile("[1-7]");
+            Matcher m = p.matcher(""+data.charAt(1));
+            boolean b = m.matches();
+            if (data.charAt(0) == '!') {
+                if (data.startsWith("!play"))
+                    return gameChallengeOut(data);
+                else if (data.startsWith("!accept"))
+                    return gameAcceptOut(data);
+                else if (data.startsWith("!decline"))
+                    return gameDeclineOut(data);
+                else if (data.startsWith("!quit"))
+                    return quit();
+                else if (b)
+                    return gameMove(data);
+            }
         }
         return dataOut(data);
     }
@@ -99,7 +119,7 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String gameAcceptIn(String data) {
-            return data.split(" ")[2] + " has accepted your challenge";
+            return data.split(" ")[1] + " has accepted your challenge";
     }
 
     @Override
@@ -111,7 +131,7 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String gameDeclineIn(String data) {
-        return data.split(" ")[2] + " has declined your challenge :(";
+        return data.split(" ")[1] + " has declined your challenge :(";
     }
 
     @Override
@@ -119,6 +139,17 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
         if (data.split(" ").length>1)
             return GNAK + " " + data.split(" ")[1] + " " + username;
         return "Something is not quite right";
+    }
+
+    @Override
+    public String gameMove(String data) {
+        return (MOVE + " " + username + " " + data.charAt(1));
+    }
+
+    @Override
+    public String gameBoard(String data) {
+        System.out.println("GAME CALLED:\n " + data);
+        return data.substring(5,data.length());
     }
 
 

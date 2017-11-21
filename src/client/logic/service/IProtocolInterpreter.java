@@ -15,6 +15,8 @@ public interface IProtocolInterpreter {
     String gameAcceptOut(String data);
     String gameDeclineIn(String data);
     String gameDeclineOut(String data);
+    String gameMove(String data);
+    String gameBoard(String data);
     String quit();
 
 }

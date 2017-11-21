@@ -13,4 +13,6 @@ public class Constants {
     public static final String GACK = "GACK";
     public static final String GNAK = "GNAK";
     public static final String GERR = "GERR";
+    public static final String GAME = "GAME";
+    public static final String MOVE = "MOVE";
 }

@@ -34,6 +34,9 @@ public class Controller {
         Thread thread = new Thread(connectionService);
         thread.start();
     }
+    public void stopConnectionThread() {
+        connectionService.setAlive(false);
+    }
     public void sendData(String data) {
         connectionService.sendData(data);
     }

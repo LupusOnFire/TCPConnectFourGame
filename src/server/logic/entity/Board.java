@@ -1,8 +1,9 @@
 package server.logic.entity;
 
+import java.io.Serializable;
 import java.util.Arrays;
 
-public class Board {
+public class Board implements Serializable{
     private int height;
     private int width;
     private Slot[][] matrix;

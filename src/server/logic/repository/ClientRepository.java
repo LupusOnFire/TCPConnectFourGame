@@ -1,5 +1,6 @@
 package server.logic.repository;
 
+import server.logic.Lobby;
 import server.logic.entity.Client;
 
 import java.net.Socket;
@@ -13,8 +14,8 @@ public class ClientRepository {
         clients = new ArrayList<>();
     }
 
-    public Client addClient(Socket socket, String username){
-        Client client = new Client(socket, username);
+    public Client addClient(Socket socket, String username, Lobby engine){
+        Client client = new Client(socket, username, engine);
         clients.add(client);
         return client;
     }

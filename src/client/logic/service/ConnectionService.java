@@ -12,6 +12,7 @@ public class ConnectionService implements Runnable {
     private IProtocolInterpreter protocolInterpreter;
     private Socket clientSocket;
     private IClient client;
+    private boolean isAlive;
 
     public ConnectionService(InetAddress serverAddress, int serverPort, IProtocolInterpreter protocolInterpreter, IClient client) throws IOException {
         this.clientSocket = new Socket(serverAddress, serverPort);
@@ -42,14 +43,19 @@ public class ConnectionService implements Runnable {
         }
     }
 
+    public void setAlive(boolean alive) {
+        isAlive = alive;
+    }
+
     @Override
     public void run() {
-        while (true) {
+        this.isAlive = true;
+        while (isAlive) {
             try {
                 DataInputStream in = new DataInputStream(clientSocket.getInputStream());
                 client.displayData(protocolInterpreter.input(in.readUTF()));
             } catch (IOException e) {
-                e.printStackTrace();
+                isAlive = false;
             }
         }
     }
