@@ -54,10 +54,17 @@ public class CommandlineClient implements IClient {
     @Override
     public void setUsername(String username) {
         this.username = username;
+        interpreter.setUsername(username);
     }
 
     @Override
-    public boolean joinServer() {
-        return controller.joinServer(username);
+    public boolean joinServer()  {
+        if (controller.joinServer(username)) {
+            System.out.println("Successfully connected");
+            return true;
+        } else {
+            System.out.println("Error connecting!");
+        }
+        return false;
     }
 }

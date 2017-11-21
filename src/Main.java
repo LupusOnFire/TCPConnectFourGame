@@ -31,10 +31,7 @@ public class Main {
                     Controller controller = new Controller();
                     CommandlineClient cli = new CommandlineClient(controller);
                     cli.setRemoteServer();
-                    boolean connected = cli.joinServer();
-                    System.out.println(connected);
-                    if (!connected)
-                        return;
+                    cli.joinServer();
                     cli.clientInput();
                 }
             }

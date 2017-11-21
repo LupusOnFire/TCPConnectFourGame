@@ -68,18 +68,18 @@ public class Engine implements Subject, Runnable {
     }
 
     @Override
-    public boolean register(Socket socket, String username) {
+    public void register(Socket socket, String username) {
         if (!clientExists(username)) {
             Client client = clientRepository.addClient(socket, username);
             System.out.println(username + " has joined");
+            sendToClient(socket, J_OK);
             notifyObserver(createListString());
             ClientThread clientThread = new ClientThread(client, this);
             Thread thread = new Thread(clientThread);
             thread.start();
-            return true;
+        } else {
+            sendToClient(socket, JERR);
         }
-        sendToClient(socket, JERR);
-        return false;
     }
 
     @Override

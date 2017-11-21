@@ -46,10 +46,7 @@ public class ConnectionBroker implements Runnable{
 
                 //accept and add client if client uses the protocol
                 if (data.startsWith("JOIN ") && data.length() > 5) {
-                    //Engine.register returns true or false depending on if username is available
-                    if (engine.register(newSocket, data.substring(5, data.length()))) {
-                        out.writeUTF(J_OK);
-                    }
+                    engine.register(newSocket, data.substring(5, data.length()));
                 } else {
                     out.writeUTF(JERR);
                 }

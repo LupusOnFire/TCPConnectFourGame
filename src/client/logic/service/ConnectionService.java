@@ -24,7 +24,6 @@ public class ConnectionService implements Runnable {
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             out.writeUTF(JOIN + " " + username);
             DataInputStream in = new DataInputStream(clientSocket.getInputStream());
-            System.out.println(in.readUTF());
             if (in.readUTF().equals(J_OK)) {
                 return true;
             }

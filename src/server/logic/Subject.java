@@ -6,7 +6,7 @@ import java.net.DatagramPacket;
 import java.net.Socket;
 
 public interface Subject {
-    boolean register(Socket socket, String username);
+    void register(Socket socket, String username);
     void unregister(String username);
     void notifyObserver(String message);
 }
