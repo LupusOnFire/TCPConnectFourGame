@@ -14,10 +14,14 @@ public class ClientRepository {
         clients = new ArrayList<>();
     }
 
-    public Client addClient(Socket socket, String username, Lobby engine){
+    public Client createClient(Socket socket, String username, Lobby engine){
         Client client = new Client(socket, username, engine);
         clients.add(client);
         return client;
+    }
+
+    public void addClient(Client client) {
+        clients.add(client);
     }
 
     public List<Client> getClients() {

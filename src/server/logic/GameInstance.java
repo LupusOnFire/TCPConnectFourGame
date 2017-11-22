@@ -6,23 +6,21 @@ import server.logic.entity.Slot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
-import java.io.IOException;
 import java.io.ObjectOutputStream;
 
-import static server.logic.Constants.DATA;
-import static server.logic.Constants.GAME;
-import static server.logic.Constants.MOVE;
+import static server.logic.Constants.*;
 
 public class GameInstance {
     private Board board;
-    private Client player1, player2;
+    private Client player1, player2, turn;
 
     public GameInstance(Client player1, Client player2) {
         this.player1 = player1;
         this.player2 = player2;
         this.board = new Board();
-        sendToBothClients(GAME + " " + serialize(board));
-        System.out.println(board.toString());
+        this.turn = player1;
+        sendToBothClients(GAME + " " + board.toString());
+        sendToBothClients(TURN + " " + turn.getUsername());
     }
 
     public Client getPlayer1() {
@@ -55,16 +53,37 @@ public class GameInstance {
                     sendToBothClients(data);
                     break;
                 }
-                /*case MOVE: {
-                    int row = Integer.parseInt(args[3]);
-                    if (args[1].equals(player1.getUsername())) {
-                        board.putPiece(row, Slot.PLAYER1);
-                    } else  {
-                        board.putPiece(row, Slot.PLAYER2);
+                case MOVE: {
+                    int row = Integer.parseInt(args[2]);
+                    if (turn.getUsername().equals(args[1])) {
+                        if (player1.getUsername().equals(args[1])) {
+                            //check if player has won
+                            boolean hasWon = board.putPiece(row, Slot.PLAYER1);
+                            if (hasWon) {
+                                sendToBothClients(GAME + " " + board.toString());
+                                win(player1);
+                                break;
+                            }
+                            turn = player2;
+                        } else {
+                            boolean hasWon = board.putPiece(row, Slot.PLAYER2);
+                            if (hasWon) {
+                                sendToBothClients(GAME + " " + board.toString());
+                                win(player2);
+                                break;
+                            }
+                            turn = player1;
+                        }
+                        if (!player1.getUsername().equals(args[1])) {
+                            sendToClient(player1, GERR);
+                        } else {
+                            sendToClient(player2, GERR);
+                        }
                     }
                     sendToBothClients(GAME + " " + board.toString());
+                    sendToBothClients(TURN + " " + turn.getUsername());
                     break;
-                }*/
+                }
                 default: {
                     sendToBothClients(data);
                     break;
@@ -86,15 +105,31 @@ public class GameInstance {
         return serializedObject;
     }
 
-    public void sendToBothClients(String data){
+    public void sendToClient(Client client, String data) {
         try {
-            DataOutputStream out = new DataOutputStream(player1.getSocket().getOutputStream());
+            DataOutputStream out = new DataOutputStream(client.getSocket().getOutputStream());
             out.writeUTF(data);
-            out = new DataOutputStream(player2.getSocket().getOutputStream());
-            out.writeUTF(data);
-        } catch (IOException e) {
+        } catch (Exception e) {
             e.printStackTrace();
         }
+    }
+
+    public void sendToBothClients(String data){
+        sendToClient(player1, data);
+        sendToClient(player2, data);
+    }
+
+    public void win(Client winner) {
+        sendToBothClients(GWIN + " " + winner.getUsername());
+        returnToLobby();
+    }
+
+    public void returnToLobby() {
+        player1.setInLobby(true);
+        player2.setInLobby(true);
+        player1.setGameInstance(null);
+        player2.setGameInstance(null);
+        System.out.println(player1.isInLobby());
     }
 }
 

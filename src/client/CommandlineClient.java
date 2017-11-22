@@ -48,6 +48,7 @@ public class CommandlineClient implements IClient {
         while (true) {
             String in = input.nextLine();
             controller.sendData(in);
+            System.out.println("sending " + in + " to controller");
             if (in.equals("!quit")){
                 controller.stopConnectionThread();
                 System.out.println("Goodbye!");

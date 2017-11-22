@@ -34,7 +34,7 @@ public class ConnectionService implements Runnable {
         return false;
     }
 
-    public void sendData(String data){
+    public void sendData(String data) {
         try {
             DataOutputStream out = new DataOutputStream(clientSocket.getOutputStream());
             out.writeUTF(protocolInterpreter.output(data));

@@ -9,6 +9,7 @@ import java.net.InetAddress;
 public class Controller {
     private IProtocolInterpreter interpreter;
     private ConnectionService connectionService;
+    private Thread thread;
 
     public Controller() {
     }
@@ -31,8 +32,8 @@ public class Controller {
         return connected;
     }
     private void startConnectionThread() {
-        Thread thread = new Thread(connectionService);
-        thread.start();
+        this.thread = new Thread(connectionService);
+        this.thread.start();
     }
     public void stopConnectionThread() {
         connectionService.setAlive(false);

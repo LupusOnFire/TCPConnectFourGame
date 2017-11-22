@@ -18,7 +18,7 @@ public class Board implements Serializable{
         }
     }
 
-    public void putPiece(int row, Slot slot) {
+    public boolean putPiece(int row, Slot slot) {
         int column = 0;
         row = row-1;
         for (int i = 0; i <= height-1; i++) {
@@ -26,11 +26,12 @@ public class Board implements Serializable{
                 matrix[row][i] = slot;
                 column = i;
                 if (checkWinCondition(row, column, slot)) {
-                    System.out.println("Winner winner chicken dinner");
+                    return true;
                 }
                 break;
             }
         }
+        return false;
     }
 
     public void forcePiece(int row, int column) {
@@ -102,7 +103,7 @@ public class Board implements Serializable{
         }
         //generate player options
         for (int i = 1; i<=width; i++) {
-            output += " "+i+" ";
+            output += "!"+i+" ";
         }
         return output;
     }

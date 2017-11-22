@@ -40,6 +40,9 @@ public class Client implements Runnable {
 
     public void setInLobby(boolean inLobby) {
         this.inLobby = inLobby;
+        if (inLobby) {
+            lobby.reRegister(this);
+        }
     }
 
     public void setAlive(boolean alive) {
@@ -52,11 +55,12 @@ public class Client implements Runnable {
             DataInputStream in;
             while (isAlive) {
                 in = new DataInputStream(getSocket().getInputStream());
-                if (isInLobby()) {
-                    lobby.digestMessage(in.readUTF());
+                String data = in.readUTF();
+                System.out.println(data);
+                if (inLobby) {
+                    lobby.digestMessage(data);
                 } else {
-                    System.out.println("sending data to gameinstance");
-                    gameInstance.digestMessage(in.readUTF());
+                    gameInstance.digestMessage(data);
                 }
             }
         } catch (IOException e) {

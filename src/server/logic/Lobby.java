@@ -39,7 +39,7 @@ public class Lobby implements Subject {
                     break;
                 }
                 case QUIT: {
-                    unregister(message.split(" ")[1]);
+                    quit(message.split(" ")[1]);
                     break;
                 }
                 case GCHL: {
@@ -68,7 +68,7 @@ public class Lobby implements Subject {
     @Override
     public void register(Socket socket, String username) {
         if (!clientExists(username)) {
-            Client client = clientRepository.addClient(socket, username, this);
+            Client client = clientRepository.createClient(socket, username, this);
             System.out.println(username + " has joined from " + socket.getRemoteSocketAddress());
             sendToClient(socket, J_OK);
             notifyObserver(createListString());
@@ -77,6 +77,11 @@ public class Lobby implements Subject {
         } else {
             sendToClient(socket, JERR);
         }
+    }
+
+    public void reRegister(Client client){
+        clientRepository.addClient(client);
+        sendToClient(client.getSocket(), J_OK);
     }
 
     public void quit(String username) {
@@ -128,6 +133,8 @@ public class Lobby implements Subject {
         challenger.setGameInstance(gameInstance);
         opponent.setInLobby(false);
         opponent.setGameInstance(gameInstance);
+        unregister(challengerName);
+        unregister(opponentName);
 
     }
     private void challengeDecline(String challengerName, String opponentName) {

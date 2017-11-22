@@ -49,6 +49,15 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
                 case GAME: {
                     return gameBoard(data);
                 }
+                case GWIN: {
+                    return gameWin(data);
+                }
+                case GERR: {
+                    return gameError();
+                }
+                case TURN: {
+                    return gameTurn(data);
+                }
             }
         }
         return "";
@@ -153,11 +162,29 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
 
     @Override
     public String gameBoard(String data) {
-        Board board = deserialize(data, Board.class);
-        return board.toString();
+        //Board board = deserialize(data, Board.class);
+        return data.substring(5,data.length());
     }
 
-    public static <T> T deserialize(String str, Class<T> cls) {
+    @Override
+    public String gameError() {
+        return "Invalid input or not your turn";
+    }
+
+    @Override
+    public String gameWin(String data) {
+        return data.substring(5, data.length()) + " has won the game!";
+    }
+
+    @Override
+    public String gameTurn(String data) {
+        String player = data.substring(5,data.length());
+        if (player.equals(username))
+            return "It's your turn!";
+        return "Waiting for " + player;
+    }
+
+    /*public static <T> T deserialize(String str, Class<T> cls) {
         // deserialize the object
         try {
             // This encoding induces a bijection between byte[] and String (unlike UTF-8)
@@ -169,7 +196,7 @@ public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
             e.printStackTrace();
         }
         return null;
-    }
+    }*/
 
     @Override
     public String quit() {
