@@ -45,6 +45,7 @@ public class CommandlineClient implements IClient {
 
     @Override
     public void clientInput() {
+        System.out.println("Type \"!play 'name'\" to challenge a player, \"!accept 'name' to accept challenge and \"!decline 'player'\" to decline game");
         while (true) {
             String in = input.nextLine();
             controller.sendData(in);
