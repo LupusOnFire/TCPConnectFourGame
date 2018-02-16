@@ -44,7 +44,7 @@ public class ConnectionBroker implements Runnable{
                 //prepare to answer
                 DataOutputStream out = new DataOutputStream(newSocket.getOutputStream());
 
-                //accept and add com.lupusbytes.connectfour.client if com.lupusbytes.connectfour.client uses the protocol
+                //accept and add client if client uses the protocol
                 if (data.startsWith("JOIN ") && data.length() > 5) {
                     lobby.register(newSocket, data.substring(5, data.length()));
                 } else {
