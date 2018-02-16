@@ -1,14 +1,14 @@
-package server.logic;
+package com.lupusbytes.connectfour.server.logic;
 
-import server.logic.entity.Client;
-import server.logic.repository.ClientRepository;
+import com.lupusbytes.connectfour.server.logic.entity.Client;
+import com.lupusbytes.connectfour.server.logic.repository.ClientRepository;
 
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.net.Socket;
 import java.util.List;
 
-import static server.logic.Constants.*;
+import static com.lupusbytes.connectfour.server.logic.Constants.*;
 
 public class Lobby implements Subject {
     ClientRepository clientRepository;

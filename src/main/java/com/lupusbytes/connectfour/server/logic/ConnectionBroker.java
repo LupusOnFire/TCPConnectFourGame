@@ -1,4 +1,4 @@
-package server.logic;
+package com.lupusbytes.connectfour.server.logic;
 
 
 import java.io.DataInputStream;
@@ -8,7 +8,7 @@ import java.net.ServerSocket;
 import java.net.Socket;
 import java.util.Date;
 
-import static server.logic.Constants.*;
+import static com.lupusbytes.connectfour.server.logic.Constants.JERR;
 
 public class ConnectionBroker implements Runnable{
     boolean stopped = false;
@@ -44,7 +44,7 @@ public class ConnectionBroker implements Runnable{
                 //prepare to answer
                 DataOutputStream out = new DataOutputStream(newSocket.getOutputStream());
 
-                //accept and add client if client uses the protocol
+                //accept and add com.lupusbytes.connectfour.client if com.lupusbytes.connectfour.client uses the protocol
                 if (data.startsWith("JOIN ") && data.length() > 5) {
                     lobby.register(newSocket, data.substring(5, data.length()));
                 } else {

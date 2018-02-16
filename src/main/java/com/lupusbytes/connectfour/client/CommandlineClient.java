@@ -1,8 +1,8 @@
-package client;
+package com.lupusbytes.connectfour.client;
 
-import client.logic.service.CliProtocolInterpreterImpl;
-import client.logic.controller.Controller;
-import client.logic.service.IProtocolInterpreter;
+import com.lupusbytes.connectfour.client.logic.controller.Controller;
+import com.lupusbytes.connectfour.client.logic.service.CliProtocolInterpreterImpl;
+import com.lupusbytes.connectfour.client.logic.service.IProtocolInterpreter;
 
 import java.net.InetAddress;
 import java.util.Scanner;
@@ -34,7 +34,7 @@ public class CommandlineClient implements IClient {
 
 
         } catch (Exception e) {
-            System.out.println("Invalid server address");
+            System.out.println("Invalid com.lupusbytes.connectfour.server address");
         }
     }
 
@@ -74,7 +74,7 @@ public class CommandlineClient implements IClient {
                 System.out.println("Error connecting!");
             }
         } catch (NullPointerException e) {
-            System.out.println("Could not connect to server");
+            System.out.println("Could not connect to com.lupusbytes.connectfour.server");
             return false;
         }
         return false;

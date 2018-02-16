@@ -1,7 +1,7 @@
-package server.logic.entity;
+package com.lupusbytes.connectfour.server.logic.entity;
 
-import server.logic.GameInstance;
-import server.logic.Lobby;
+import com.lupusbytes.connectfour.server.logic.GameInstance;
+import com.lupusbytes.connectfour.server.logic.Lobby;
 
 import java.io.DataInputStream;
 import java.io.IOException;

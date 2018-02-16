@@ -1,14 +1,10 @@
-package client.logic.service;
+package com.lupusbytes.connectfour.client.logic.service;
 
 
-import server.logic.entity.Board;
-
-import java.io.ByteArrayInputStream;
-import java.io.ObjectInputStream;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-import static server.logic.Constants.*;
+import static com.lupusbytes.connectfour.server.logic.Constants.*;
 
 public class CliProtocolInterpreterImpl implements IProtocolInterpreter {
     String username;

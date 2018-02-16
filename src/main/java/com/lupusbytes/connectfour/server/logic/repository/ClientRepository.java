@@ -1,7 +1,7 @@
-package server.logic.repository;
+package com.lupusbytes.connectfour.server.logic.repository;
 
-import server.logic.Lobby;
-import server.logic.entity.Client;
+import com.lupusbytes.connectfour.server.logic.Lobby;
+import com.lupusbytes.connectfour.server.logic.entity.Client;
 
 import java.net.Socket;
 import java.util.ArrayList;

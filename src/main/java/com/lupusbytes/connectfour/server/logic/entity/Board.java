@@ -1,4 +1,4 @@
-package server.logic.entity;
+package com.lupusbytes.connectfour.server.logic.entity;
 
 import java.io.Serializable;
 import java.util.Arrays;

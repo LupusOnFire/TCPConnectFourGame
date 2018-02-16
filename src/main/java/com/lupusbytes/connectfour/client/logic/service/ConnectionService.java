@@ -1,12 +1,15 @@
-package client.logic.service;
+package com.lupusbytes.connectfour.client.logic.service;
 
-import client.IClient;
+import com.lupusbytes.connectfour.client.IClient;
 
-import java.io.*;
+import java.io.DataInputStream;
+import java.io.DataOutputStream;
+import java.io.IOException;
 import java.net.InetAddress;
 import java.net.Socket;
 
-import static server.logic.Constants.*;
+import static com.lupusbytes.connectfour.server.logic.Constants.JOIN;
+import static com.lupusbytes.connectfour.server.logic.Constants.J_OK;
 
 public class ConnectionService implements Runnable {
     private IProtocolInterpreter protocolInterpreter;

@@ -1,4 +1,4 @@
-package client.logic.service;
+package com.lupusbytes.connectfour.client.logic.service;
 
 public interface IProtocolInterpreter {
     void setUsername(String username);

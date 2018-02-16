@@ -1,14 +1,14 @@
-package server.logic;
+package com.lupusbytes.connectfour.server.logic;
 
-import server.logic.entity.Board;
-import server.logic.entity.Client;
-import server.logic.entity.Slot;
+import com.lupusbytes.connectfour.server.logic.entity.Board;
+import com.lupusbytes.connectfour.server.logic.entity.Client;
+import com.lupusbytes.connectfour.server.logic.entity.Slot;
 
 import java.io.ByteArrayOutputStream;
 import java.io.DataOutputStream;
 import java.io.ObjectOutputStream;
 
-import static server.logic.Constants.*;
+import static com.lupusbytes.connectfour.server.logic.Constants.*;
 
 public class GameInstance {
     private Board board;

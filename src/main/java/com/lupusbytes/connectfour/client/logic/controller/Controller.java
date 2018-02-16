@@ -1,7 +1,8 @@
-package client.logic.controller;
-import client.IClient;
-import client.logic.service.*;
-import server.logic.entity.Client;
+package com.lupusbytes.connectfour.client.logic.controller;
+
+import com.lupusbytes.connectfour.client.IClient;
+import com.lupusbytes.connectfour.client.logic.service.ConnectionService;
+import com.lupusbytes.connectfour.client.logic.service.IProtocolInterpreter;
 
 import java.io.IOException;
 import java.net.InetAddress;

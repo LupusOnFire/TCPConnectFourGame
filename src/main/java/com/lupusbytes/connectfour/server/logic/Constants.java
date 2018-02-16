@@ -1,4 +1,4 @@
-package server.logic;
+package com.lupusbytes.connectfour.server.logic;
 
 public class Constants {
     //Protocol

@@ -1,8 +1,5 @@
-package server.logic;
+package com.lupusbytes.connectfour.server.logic;
 
-import server.logic.entity.Client;
-
-import java.net.DatagramPacket;
 import java.net.Socket;
 
 public interface Subject {
