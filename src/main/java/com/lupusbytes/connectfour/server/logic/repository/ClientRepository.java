@@ -4,42 +4,57 @@ import com.lupusbytes.connectfour.server.logic.Lobby;
 import com.lupusbytes.connectfour.server.logic.entity.Client;
 
 import java.net.Socket;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
 
 public class ClientRepository {
-    List<Client> clients;
+    Map<String, Client> clients;
 
     public ClientRepository() {
-        clients = new ArrayList<>();
+        clients = new HashMap();
     }
 
-    public Client createClient(Socket socket, String username, Lobby engine){
+    public Client newClient(Socket socket, String username, Lobby engine){
         Client client = new Client(socket, username, engine);
-        clients.add(client);
+        clients.put(username, client);
         return client;
     }
 
     public void addClient(Client client) {
-        clients.add(client);
+        if (!clientExists(client.getUsername()))
+            clients.put(client.getUsername(), client);
     }
 
-    public List<Client> getClients() {
+    public boolean clientExists(String username) {
+        if (clients.containsKey(username)) {
+            return true;
+        }
+        return false;
+    }
+
+    public Map<String, Client> getClients() {
         return clients;
     }
 
-    public Client getClientByUsername(String username) {
-        for(Client c : clients) {
-            if (username.equals(c.getUsername())) {
-                return c;
+    public List getClientsInLobby() {
+        List<Client> clientsInLobby = new LinkedList<>();
+        for (Map.Entry<String, Client> c : clients.entrySet()) {
+            if (c.getValue().isInLobby() == true) {
+                clientsInLobby.add(c.getValue());
             }
+        }
+        return clientsInLobby;
+    }
+
+    public Client getClientByUsername(String username) {
+        if (clients.containsKey(username)) {
+            return clients.get(username);
         }
         return null;
     }
     public Client getClientBySocket(Socket socket) {
-        for (Client c : clients) {
-            if (c.getSocket() == socket) {
-                return c;
+        for (Map.Entry<String, Client> c : clients.entrySet()) {
+            if (c.getValue().getSocket() == socket) {
+                return c.getValue();
             }
         }
         return null;
