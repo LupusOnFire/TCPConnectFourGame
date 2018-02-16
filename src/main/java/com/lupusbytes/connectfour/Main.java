@@ -32,6 +32,7 @@ public class Main {
                 System.out.println("JavaFX client started");
             } else if (cmd.hasOption("h")) {
                 System.out.println("CLI client starting");
+                startCliClient();
             } else if (cmd.hasOption("s")) {
                 System.out.println("Server starting");
                 startServer(port);
