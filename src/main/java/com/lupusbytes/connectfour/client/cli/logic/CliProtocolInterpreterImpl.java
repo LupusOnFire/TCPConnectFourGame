@@ -1,5 +1,7 @@
-package com.lupusbytes.connectfour.client.logic.service;
+package com.lupusbytes.connectfour.client.cli.logic;
 
+
+import com.lupusbytes.connectfour.client.logic.IProtocolInterpreter;
 
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;

@@ -1,4 +1,4 @@
-package com.lupusbytes.connectfour.client;
+package com.lupusbytes.connectfour.client.logic;
 
 public interface IClient {
     void setRemoteServer();

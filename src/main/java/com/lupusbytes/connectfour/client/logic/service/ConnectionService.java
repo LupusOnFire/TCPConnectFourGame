@@ -1,6 +1,7 @@
 package com.lupusbytes.connectfour.client.logic.service;
 
-import com.lupusbytes.connectfour.client.IClient;
+import com.lupusbytes.connectfour.client.logic.IClient;
+import com.lupusbytes.connectfour.client.logic.IProtocolInterpreter;
 
 import java.io.DataInputStream;
 import java.io.DataOutputStream;

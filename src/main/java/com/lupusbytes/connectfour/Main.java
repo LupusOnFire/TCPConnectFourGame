@@ -1,13 +1,12 @@
 package com.lupusbytes.connectfour;
 
-import com.lupusbytes.connectfour.client.CommandlineClient;
-import com.lupusbytes.connectfour.client.IClient;
+import com.lupusbytes.connectfour.client.cli.CommandlineClient;
+import com.lupusbytes.connectfour.client.logic.IClient;
 import com.lupusbytes.connectfour.client.logic.controller.Controller;
 import com.lupusbytes.connectfour.server.logic.ConnectionBroker;
 import com.lupusbytes.connectfour.server.logic.Lobby;
 import com.lupusbytes.connectfour.server.logic.entity.Board;
 import com.lupusbytes.connectfour.server.logic.entity.Slot;
-import com.sun.org.apache.xpath.internal.SourceTree;
 import org.apache.commons.cli.*;
 
 import java.util.Scanner;
