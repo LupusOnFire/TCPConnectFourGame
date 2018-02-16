@@ -1,4 +1,4 @@
-package com.lupusbytes.connectfour.client.cli.logic;
+package com.lupusbytes.connectfour.client.cli;
 
 
 import com.lupusbytes.connectfour.client.logic.IProtocolInterpreter;

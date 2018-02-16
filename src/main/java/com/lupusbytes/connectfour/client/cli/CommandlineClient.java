@@ -2,7 +2,6 @@ package com.lupusbytes.connectfour.client.cli;
 
 import com.lupusbytes.connectfour.client.logic.IClient;
 import com.lupusbytes.connectfour.client.logic.controller.Controller;
-import com.lupusbytes.connectfour.client.cli.logic.CliProtocolInterpreterImpl;
 import com.lupusbytes.connectfour.client.logic.IProtocolInterpreter;
 
 import java.net.InetAddress;
