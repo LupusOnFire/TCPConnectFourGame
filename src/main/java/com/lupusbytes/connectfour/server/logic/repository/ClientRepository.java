@@ -13,7 +13,7 @@ public class ClientRepository {
         clients = new HashMap();
     }
 
-    public Client newClient(Socket socket, String username, Lobby engine){
+    public Client addClient(Socket socket, String username, Lobby engine){
         Client client = new Client(socket, username, engine);
         clients.put(username, client);
         return client;
@@ -38,7 +38,7 @@ public class ClientRepository {
     public List getClientsInLobby() {
         List<Client> clientsInLobby = new LinkedList<>();
         for (Map.Entry<String, Client> c : clients.entrySet()) {
-            if (c.getValue().isInLobby() == true) {
+            if (c.getValue().isInLobby()) {
                 clientsInLobby.add(c.getValue());
             }
         }
