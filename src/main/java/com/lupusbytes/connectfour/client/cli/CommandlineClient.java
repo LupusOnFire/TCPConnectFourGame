@@ -34,7 +34,7 @@ public class CommandlineClient implements IClient {
 
 
         } catch (Exception e) {
-            System.out.println("Invalid com.lupusbytes.connectfour.server address");
+            System.out.println("Invalid server address");
         }
     }
 
@@ -74,7 +74,7 @@ public class CommandlineClient implements IClient {
                 System.out.println("Error connecting!");
             }
         } catch (NullPointerException e) {
-            System.out.println("Could not connect to com.lupusbytes.connectfour.server");
+            System.out.println("Could not connect to server");
             return false;
         }
         return false;
